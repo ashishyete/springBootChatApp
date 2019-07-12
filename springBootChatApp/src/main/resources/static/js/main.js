@@ -45,6 +45,16 @@ function onConnected() {
     connectingElement.classList.add('hidden');
 }
 
+//handle, who left the chat
+window.addEventListener("beforeunload", function (e) {
+	  var confirmationMessage = "\o/";
+	    stompClient.send("/app/chat.register",
+	        {},
+	        JSON.stringify({sender: username, type: 'LEAVE'})
+	    )
+	  (e || window.event).returnValue = confirmationMessage;
+	  return confirmationMessage;                            
+	});
 
 function onError(error) {
     connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
